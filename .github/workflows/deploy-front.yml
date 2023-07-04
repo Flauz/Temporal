@@ -10,18 +10,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [14.15.x]
+    # strategy:
+    #   matrix:
+    #     node-version: [14.15.x]
 
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: "pnpm"
-          cache-dependency-path: ./frontend/pnpm-lock.yaml
+          node-version: "18.x"
+        
+      - name: Install pnpm
+        run: npm install -g pnpm
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+        working-directory: ./frontend
 
       - name: Run lint
         run: pnpm run lint
